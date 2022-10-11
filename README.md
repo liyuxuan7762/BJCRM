@@ -1,5 +1,6 @@
 ## 动力节点CRM项目制作
 ## 使用Git每天跟踪项目进度
+项目视频地址链接：https://www.bilibili.com/video/BV1tZ4y1d7kg/?p=1
 
 ## 2022/10/8
 
