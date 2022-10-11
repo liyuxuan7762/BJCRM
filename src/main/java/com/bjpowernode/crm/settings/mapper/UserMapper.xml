@@ -232,4 +232,11 @@
         from tbl_user
         where login_act = #{loginAct} and login_pwd = #{loginPwd}
     </select>
+
+    <select id="selectAllUsers" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_user
+        where lock_state = '1'
+    </select>
 </mapper>

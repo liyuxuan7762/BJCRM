@@ -1,4 +1,4 @@
-package com.bjpowernode.crm.settings.controller;
+package com.bjpowernode.crm.settings.web.controller;
 
 import com.bjpowernode.crm.commons.constants.Constants;
 import com.bjpowernode.crm.commons.domain.ReturnObj;

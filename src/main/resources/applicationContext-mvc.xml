@@ -13,7 +13,7 @@
     <mvc:default-servlet-handler/>
     <!-- spring mvc 扫描包下的controller -->
     <context:component-scan base-package="com.bjpowernode.crm.web.controller"/>
-    <context:component-scan base-package="com.bjpowernode.crm.settings.controller"/>
+    <context:component-scan base-package="com.bjpowernode.crm.settings.web.controller"/>
     <context:component-scan base-package="com.bjpowernode.crm.workbench.web.controller"/>
     <!-- 配置注解驱动 -->
     <mvc:annotation-driven/>
@@ -24,6 +24,19 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+    <!--    配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--            *表示一级目录 ** 表示该路径下的所有目录-->
+            <mvc:mapping path="/settings/**"/>
+            <mvc:mapping path="/workbench/**"/>
+            <!--            上面设置完会将跳转登录的请求toLogin.do和登录的请求login.do都拦截，会产生死循环，因此需要排除上面的两个请求-->
+            <mvc:exclude-mapping path="/settings/qx/user/toLogin.do"/>
+            <mvc:exclude-mapping path="/settings/qx/user/login.do"/>
+            <!--            指定对应的拦截器类-->
+            <bean class="com.bjpowernode.crm.settings.web.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
     <!-- 配置文件上传解析器 id:必须是multipartResolver-->
     <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="#{1024*1024*80}"/>
