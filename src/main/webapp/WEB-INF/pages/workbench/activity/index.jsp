@@ -21,10 +21,74 @@
     <script type="text/javascript">
 
         $(function () {
+            // 给创建按钮添加单击事件
+            $("#createActivityBtn").click(function () {
+                // 点击弹出模态窗口的时候，要清空模态窗口里面的内容
+                $("#createActivityForm").get(0).reset(); //get是将jQuery转化成DOM对象
+                // 显示模态窗口
+                $("#createActivityModal").modal("show");
+            });
 
+            // 给保存按钮添加单击事件
+            $("#saveActivityBtn").click(function () {
+                // 1.获取页面数据
+                var owner = $("#create-marketActivityOwner").val()
+                var name = $.trim($("#create-marketActivityName").val());
+                var startDate = $("#create-startTime").val();
+                var endDate = $("#create-endTime").val();
+                var cost = $.trim($("#create-cost").val());
+                var describe = $.trim($("#create-describe").val());
 
+                // 2.判断数据是否合法
+                // 创建者和名称不能为空'
+                if (owner == "") {
+                    alert("创建者不能为空");
+                    return;
+                }
+                if (name == "") {
+                    alert("活动名称不能为空");
+                    return;
+                }
+                // 当开始日期和结束日期都不为空的时候 开始时期要小于结束日期
+                if (startDate != "" && endDate != "") {
+                    if (startDate > endDate) {
+                        alert("开始时期要小于结束日期");
+                        return;
+                    }
+                }
+                // 判断成本只能是非负整数
+                var regExp = /^(([1-9]\d*)|0)$/;
+                if (!regExp.test(cost)) {
+                    alert("成本只能是非负整数");
+                    return;
+                }
+
+                // 2.发送Ajax请求
+                $.ajax({
+                    url: "workbench/activity/saveActivity.do",
+                    data: {
+                        "owner": owner,
+                        "name": name,
+                        "startDate": startDate,
+                        "endDate": endDate,
+                        "cost": cost,
+                        "description": describe
+                    },
+                    type: "post",
+                    success: function (data) {
+                        if (data.code == "1") {
+                            // 如果添加成功 关闭模态窗口
+                            $("#createActivityModal").modal("hide");
+                            // 刷新列表
+                        } else {
+                            // 不关闭模态窗口
+                            alert(data.message);
+                            $("#createActivityModal").modal("show");
+                        }
+                    }
+                });
+            })
         });
-
     </script>
 </head>
 <body>
@@ -41,7 +105,7 @@
             </div>
             <div class="modal-body">
 
-                <form class="form-horizontal" role="form">
+                <form id="createActivityForm" class="form-horizontal" role="form">
 
                     <div class="form-group">
                         <label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span
@@ -89,7 +153,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+                <button type="button" class="btn btn-primary" id="saveActivityBtn">保存</button>
             </div>
         </div>
     </div>
@@ -249,7 +313,7 @@
         <div class="btn-toolbar" role="toolbar"
              style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
             <div class="btn-group" style="position: relative; top: 18%;">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createActivityModal">
+                <button type="button" class="btn btn-primary" id="createActivityBtn">
                     <span class="glyphicon glyphicon-plus"></span> 创建
                 </button>
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span

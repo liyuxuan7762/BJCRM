@@ -1,12 +1,21 @@
 package com.bjpowernode.crm.workbench.web.controller;
 
+import com.bjpowernode.crm.commons.constants.Constants;
+import com.bjpowernode.crm.commons.domain.ReturnObj;
+import com.bjpowernode.crm.commons.utils.DateUtils;
+import com.bjpowernode.crm.commons.utils.UUIDUtils;
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.settings.service.UserService;
+import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -14,6 +23,8 @@ public class ActivityController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ActivityService activityService;
 
     // 显示Activity的主页面，完成动态数据的加载
     @RequestMapping("/workbench/activity/index.do")
@@ -25,5 +36,32 @@ public class ActivityController {
         request.setAttribute("userList", userList);
         // 4.页面跳转
         return "workbench/activity/index";
+    }
+
+    // 保存市场活动 返回成功与否的Json对象
+    @RequestMapping("/workbench/activity/saveActivity.do")
+    @ResponseBody
+    public Object saveActivity(Activity activity, HttpSession session) {
+        // 1.接收数据并封装对象 封装额外的数据 比如创建用户id，活动id，创建时间
+        activity.setId(UUIDUtils.getUUID());
+        activity.setCreateTime(DateUtils.getFormatDate(new Date()));
+        User currentUser = (User) session.getAttribute(Constants.SESSION_USER_KEY);
+        activity.setCreateBy(currentUser.getId());
+        // 2.调用业务层方法
+        ReturnObj obj = new ReturnObj();
+        try {
+            int result = activityService.saveCreatActivity(activity);
+            if (result > 0) {
+                obj.setCode("1");
+                obj.setMessage("添加成功");
+            } else {
+                obj.setCode("0");
+                obj.setMessage("系统忙......");
+            }
+        } catch (Exception e) {
+            obj.setCode("0");
+            obj.setMessage("系统忙......");
+        }
+        return obj; // 返回json对象
     }
 }

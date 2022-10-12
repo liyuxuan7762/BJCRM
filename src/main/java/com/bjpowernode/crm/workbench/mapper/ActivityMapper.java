@@ -52,4 +52,7 @@ public interface ActivityMapper {
      */
     int updateByPrimaryKey(Activity record);
 
+    // 插入一条市场活动
+    int insertActivity(Activity activity);
+
 }

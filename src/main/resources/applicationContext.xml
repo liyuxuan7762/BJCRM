@@ -10,6 +10,7 @@ http://www.springframework.org/schema/context/spring-context.xsd">
     <context:property-placeholder location="classpath:*.properties" />-->
     <!-- 扫描注解 -->
     <context:component-scan base-package="com.bjpowernode.crm.settings.service"/>
+    <context:component-scan base-package="com.bjpowernode.crm.workbench.service"/>
     <!-- 导入数据相关配置 -->
     <import resource="applicationContext-datasource.xml"/>
 </beans>
