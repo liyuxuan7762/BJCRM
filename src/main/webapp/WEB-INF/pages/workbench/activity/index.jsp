@@ -87,7 +87,18 @@
                         }
                     }
                 });
-            })
+            });
+
+            // 添加日历功能
+            $(".mydate").datetimepicker({
+                language: 'zn-CH', // 设置日历语言
+                format: 'yyyy-mm-dd',
+                minView: 'month', // 显示最小显示的级别，如果选择月，那么最小的显示范围就是一个月的30天
+                initialDate: new Date(), // 日历初始日期
+                autoclose: true, // 选择完自动关闭日历,
+                todayBtn: true, // 显示今天按钮
+                clearBtn: true // 显示清空按钮
+            });
         });
     </script>
 </head>
@@ -127,11 +138,11 @@
                     <div class="form-group">
                         <label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="create-startTime">
+                            <input type="text" class="form-control mydate" id="create-startTime" readonly>
                         </div>
                         <label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="create-endTime">
+                            <input type="text" class="form-control mydate" id="create-endTime" readonly>
                         </div>
                     </div>
                     <div class="form-group">
@@ -296,13 +307,13 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">开始日期</div>
-                        <input class="form-control" type="text" id="startTime"/>
+                        <input class="form-control mydate" type="text" id="startTime" readonly/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">结束日期</div>
-                        <input class="form-control" type="text" id="endTime">
+                        <input class="form-control mydate" type="text" id="endTime" readonly>
                     </div>
                 </div>
 
