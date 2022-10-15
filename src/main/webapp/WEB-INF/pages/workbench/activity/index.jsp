@@ -99,7 +99,53 @@
                 todayBtn: true, // 显示今天按钮
                 clearBtn: true // 显示清空按钮
             });
+
+            // 当页面元素加载完成后，执行无条件查询活动记录第一页
+            queryActivityByConditionForPage(1, 10);
+
+            // 当点击查询按钮时
+            $("#queryBtn").click(function () {
+                queryActivityByConditionForPage(1, 10);
+            })
         });
+        function queryActivityByConditionForPage(pageNo, pageSize) {
+            // 1.获取页面元素
+            var owner = $("#query-owner").val()
+            var name = $.trim($("#query-name").val());
+            var startDate = $("#query-startDate").val();
+            var endDate = $("#query-endDate").val();
+            var pageSize = pageSize;
+            var pageNo = pageNo;
+            // 2.发送请求
+            $.ajax({
+                url: "workbench/activity/queryActivity.do",
+                type: "post",
+                dataType: "json",
+                data: {
+                    "owner": owner,
+                    "name": name,
+                    "startDate": startDate,
+                    "endDate": endDate,
+                    "pageSize": pageSize,
+                    "pageNo": pageNo
+                },
+                success: function (data) {
+                    $("#totalRowB").text(data.totalRow);
+                    var htmlStr = "";
+                    $.each(data.activityList, function (index, obj) {
+                        htmlStr += "<tr class=\"active\">";
+                        htmlStr += "<td><input type=\"checkbox\" value=\"" + obj.id + "\"/></td>";
+                        htmlStr += "<td><a style=\"text-decoration: none; cursor: pointer; onclick=\"window.location.href='detail.html'\">" + obj.name + "</a></td>";
+                        htmlStr += "<td>" + obj.owner + "</td>";
+                        htmlStr += "<td>" + obj.startDate + "</td>";
+                        htmlStr += "<td>" + obj.endDate + "</td>";
+                        htmlStr += "</tr>";
+                    });
+                    $("#tbody").html(htmlStr);
+                }
+            });
+        }
+
     </script>
 </head>
 <body>
@@ -291,33 +337,32 @@
 
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">名称</div>
+                        <div class="input-group-addon" id="query-name">名称</div>
                         <input class="form-control" type="text">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">所有者</div>
+                        <div class="input-group-addon" id="query-owner">所有者</div>
                         <input class="form-control" type="text">
                     </div>
                 </div>
 
-
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">开始日期</div>
+                        <div class="input-group-addon" id="query-startDate">开始日期</div>
                         <input class="form-control mydate" type="text" id="startTime" readonly/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">结束日期</div>
+                        <div class="input-group-addon" id="query-endDate">结束日期</div>
                         <input class="form-control mydate" type="text" id="endTime" readonly>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-default">查询</button>
+                <button type="button" class="btn btn-default" id="queryBtn">查询</button>
 
             </form>
         </div>
@@ -355,7 +400,7 @@
                     <td>结束日期</td>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="tbody">
                 <tr class="active">
                     <td><input type="checkbox"/></td>
                     <td><a style="text-decoration: none; cursor: pointer;"
@@ -378,7 +423,8 @@
 
         <div style="height: 50px; position: relative;top: 30px;">
             <div>
-                <button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
+                <button type="button" class="btn btn-default" style="cursor: default;">共<b id="totalRowB">50</b>条记录
+                </button>
             </div>
             <div class="btn-group" style="position: relative;top: -34px; left: 110px;">
                 <button type="button" class="btn btn-default" style="cursor: default;">显示</button>

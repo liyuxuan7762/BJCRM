@@ -45,3 +45,11 @@
 3.完成前端页面JQuery代码的编写，顺便复习了正则表达式相关内容
 
 4.了解Boostrap中的DateTimePicker插件的相关配置，并整理出通用的JS插件的使用步骤
+
+## 2022/10/15
+
+1.完成分页功能的mapper, service, controller, 前端页面Js编写
+
+2.学习并完成了Boostrap框架的pagination分页插件的使用以及如何应用到现有的CRM项目中
+
+

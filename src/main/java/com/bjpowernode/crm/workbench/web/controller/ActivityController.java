@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ActivityController {
@@ -63,5 +65,33 @@ public class ActivityController {
             obj.setMessage("系统忙......");
         }
         return obj; // 返回json对象
+    }
+
+
+    // 根据条件分页查询市场活动
+    @RequestMapping("/workbench/activity/queryActivity.do")
+    @ResponseBody
+    public Object queryActivity(String name, String owner, String startDate, String endDate, int pageSize, int pageNo) {
+        // 1.接收并封装参数
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("owner", owner);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("pageSize", pageSize);
+        map.put("beginNo", (pageNo - 1) * pageSize);
+
+        // 2.调用service层方法
+        List<Activity> activityList = activityService.queryActivityByConditionForPage(map);
+        int count = activityService.queryActivityTotalRowByCondition(map);
+
+        //返回Json对象
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("activityList", activityList);
+        returnMap.put("totalRow", count);
+
+        return returnMap;
+
+
     }
 }

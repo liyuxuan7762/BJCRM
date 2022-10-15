@@ -189,7 +189,7 @@
     </update>
 
 
-<!--    插入一条市场记录-->
+    <!--    插入一条市场记录-->
     <insert id="insertActivity" parameterType="com.bjpowernode.crm.workbench.domain.Activity">
         <!--
           WARNING - @mbggenerated
@@ -204,4 +204,60 @@
         #{createTime,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR})
     </insert>
 
+    <!--    按照条件分页查询市场活动-->
+    <select id="selectActivityByConditionForPage" parameterType="map" resultMap="BaseResultMap">
+        select u.id,
+        u1.name as owner,
+        u.name,
+        start_date,
+        end_date,
+        cost,
+        description,
+        create_time,
+        u2.name as create_by,
+        u.edit_time,
+        u3.name as edit_by
+        from tbl_activity u
+        inner join tbl_user u1 on u.owner = u1.id
+        inner join tbl_user u2 on u.create_by = u2.id
+        left join tbl_user u3 on u.create_by = u3.id
+        <where>
+            <if test="name != null and name != ''">
+                and u.name like '%' #{name} '%'
+            </if>
+            <if test="name != null and name != ''">
+                and u.owner = #{owner}
+            </if>
+            <if test="start_date != null and start_date != ''">
+                and u.start_date &gt;= #{start_date}
+            </if>
+            <if test="end_date != null and end_date != ''">
+                and u.end_date &lt; #{end_date}
+            </if>
+        </where>
+        limit #{beginNo}, #{pageSize}
+    </select>
+
+    <!--    根据条件查询市场活动总条数-->
+    <select id="selectActivityTotalRowByCondition" parameterType="map" resultType="int">
+        select count(*)
+        from tbl_activity u
+        inner join tbl_user u1 on u.owner = u1.id
+        inner join tbl_user u2 on u.create_by = u2.id
+        left join tbl_user u3 on u.create_by = u3.id
+        <where>
+            <if test="name != null and name != ''">
+                and u.name like '%' #{name} '%'
+            </if>
+            <if test="name != null and name != ''">
+                and u.owner = #{owner}
+            </if>
+            <if test="start_date != null and start_date != ''">
+                and u.start_date &gt;= #{start_date}
+            </if>
+            <if test="end_date != null and end_date != ''">
+                and u.end_date &lt; #{end_date}
+            </if>
+        </where>
+    </select>
 </mapper>

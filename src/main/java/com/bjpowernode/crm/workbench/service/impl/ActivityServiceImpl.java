@@ -6,6 +6,9 @@ import com.bjpowernode.crm.workbench.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service("activityService")
 public class ActivityServiceImpl implements ActivityService {
 
@@ -15,5 +18,15 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public int saveCreatActivity(Activity activity) {
         return mapper.insertActivity(activity);
+    }
+
+    @Override
+    public List<Activity> queryActivityByConditionForPage(Map<String, Object> map) {
+        return mapper.selectActivityByConditionForPage(map);
+    }
+
+    @Override
+    public int queryActivityTotalRowByCondition(Map<String, Object> map) {
+        return mapper.selectActivityTotalRowByCondition(map);
     }
 }
