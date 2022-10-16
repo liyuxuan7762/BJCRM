@@ -18,6 +18,11 @@
     <script type="text/javascript"
             src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
+    <%--    分页插件--%>
+    <script href="jquery/bs_pagination-master/css/jquery.bs_pagination.min.css" type="text/css"
+            rel="stylesheet"></script>
+    <script src="jquery/bs_pagination-master/js/jquery.bs_pagination.min.js"></script>
+    <script src="jquery/bs_pagination-master/localization/en.js"></script>
     <script type="text/javascript">
 
         $(function () {
@@ -80,6 +85,7 @@
                             // 如果添加成功 关闭模态窗口
                             $("#createActivityModal").modal("hide");
                             // 刷新列表
+                            queryActivityByConditionForPage(1, $("#pagination").bs_pagination("getOption", "rowsPerPage"));
                         } else {
                             // 不关闭模态窗口
                             alert(data.message);
@@ -101,13 +107,29 @@
             });
 
             // 当页面元素加载完成后，执行无条件查询活动记录第一页
-            queryActivityByConditionForPage(1, 10);
+            queryActivityByConditionForPage(1, 5);
 
             // 当点击查询按钮时
             $("#queryBtn").click(function () {
-                queryActivityByConditionForPage(1, 10);
+                queryActivityByConditionForPage(1, $("#pagination").bs_pagination("getOption", "rowsPerPage"));
+            })
+
+            // 给全选按钮添加单击事件
+            $("#checkAll").click(function () {
+                $("#tbody input[type = 'checkbox']").prop("checked", this.checked);
+            });
+
+            // 给每一个市场活动记录的checkbox添加事件，由于记录属于动态元素，因此需要使用on函数添加事件
+            $("#tbody").on("click", "input[type = 'checkbox']", function () {
+                // 判断checkbox的总个数和checked属性为true总个数是否相等，相等则全选选中，否则全选不选中
+                if ($("#tbody input[type = 'checkbox']").size() === $("#tbody input[type = 'checkbox']:checked").size()) {
+                    $("#checkAll").prop("checked", true);
+                } else {
+                    $("#checkAll").prop("checked", false);
+                }
             })
         });
+
         function queryActivityByConditionForPage(pageNo, pageSize) {
             // 1.获取页面元素
             var owner = $("#query-owner").val()
@@ -116,6 +138,8 @@
             var endDate = $("#query-endDate").val();
             var pageSize = pageSize;
             var pageNo = pageNo;
+            alert(pageSize);
+            alert(pageNo);
             // 2.发送请求
             $.ajax({
                 url: "workbench/activity/queryActivity.do",
@@ -130,7 +154,7 @@
                     "pageNo": pageNo
                 },
                 success: function (data) {
-                    $("#totalRowB").text(data.totalRow);
+                    // $("#totalRowB").text(data.totalRow);
                     var htmlStr = "";
                     $.each(data.activityList, function (index, obj) {
                         htmlStr += "<tr class=\"active\">";
@@ -142,9 +166,30 @@
                         htmlStr += "</tr>";
                     });
                     $("#tbody").html(htmlStr);
+
+                    // 重置全选按钮
+                    $("#checkAll").prop("checked", false);
+
+                    var totalPageNum = Math.ceil(data.totalRow / pageSize);
+                    // 调用分页插件
+                    $("#pagination").bs_pagination({
+                        currentPage: pageNo, // 当前页号
+                        rowsPerPage: pageSize, // 每行记录数
+                        totalRows: data.totalRow, // 总记录数
+                        totalPages: totalPageNum,// 总条数
+                        visiblePageLinks: 5, // 翻页按钮个数,
+                        showGoToPage: true,
+                        showRowsPerPage: true,
+                        showRowsInfo: true,
+                        showRowsDefaultInfo: true,
+                        onChangePage: function (event, pageObj) {
+                            queryActivityByConditionForPage(pageObj.currentPage, pageObj.rowsPerPage);
+                        }
+                    });
                 }
             });
         }
+
 
     </script>
 </head>
@@ -393,7 +438,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr style="color: #B3B3B3;">
-                    <td><input type="checkbox"/></td>
+                    <td><input type="checkbox" id="checkAll"/></td>
                     <td>名称</td>
                     <td>所有者</td>
                     <td>开始日期</td>
@@ -419,43 +464,44 @@
                 </tr>
                 </tbody>
             </table>
+            <div id="pagination"></div>
         </div>
 
-        <div style="height: 50px; position: relative;top: 30px;">
-            <div>
-                <button type="button" class="btn btn-default" style="cursor: default;">共<b id="totalRowB">50</b>条记录
-                </button>
-            </div>
-            <div class="btn-group" style="position: relative;top: -34px; left: 110px;">
-                <button type="button" class="btn btn-default" style="cursor: default;">显示</button>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        10
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">20</a></li>
-                        <li><a href="#">30</a></li>
-                    </ul>
-                </div>
-                <button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
-            </div>
-            <div style="position: relative;top: -88px; left: 285px;">
-                <nav>
-                    <ul class="pagination">
-                        <li class="disabled"><a href="#">首页</a></li>
-                        <li class="disabled"><a href="#">上一页</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">下一页</a></li>
-                        <li class="disabled"><a href="#">末页</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+        <%--        <div style="height: 50px; position: relative;top: 30px;">--%>
+        <%--            <div>--%>
+        <%--                <button type="button" class="btn btn-default" style="cursor: default;">共<b id="totalRowB">50</b>条记录--%>
+        <%--                </button>--%>
+        <%--            </div>--%>
+        <%--            <div class="btn-group" style="position: relative;top: -34px; left: 110px;">--%>
+        <%--                <button type="button" class="btn btn-default" style="cursor: default;">显示</button>--%>
+        <%--                <div class="btn-group">--%>
+        <%--                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">--%>
+        <%--                        10--%>
+        <%--                        <span class="caret"></span>--%>
+        <%--                    </button>--%>
+        <%--                    <ul class="dropdown-menu" role="menu">--%>
+        <%--                        <li><a href="#">20</a></li>--%>
+        <%--                        <li><a href="#">30</a></li>--%>
+        <%--                    </ul>--%>
+        <%--                </div>--%>
+        <%--                <button type="button" class="btn btn-default" style="cursor: default;">条/页</button>--%>
+        <%--            </div>--%>
+        <%--            <div style="position: relative;top: -88px; left: 285px;">--%>
+        <%--                <nav>--%>
+        <%--                    <ul class="pagination">--%>
+        <%--                        <li class="disabled"><a href="#">首页</a></li>--%>
+        <%--                        <li class="disabled"><a href="#">上一页</a></li>--%>
+        <%--                        <li class="active"><a href="#">1</a></li>--%>
+        <%--                        <li><a href="#">2</a></li>--%>
+        <%--                        <li><a href="#">3</a></li>--%>
+        <%--                        <li><a href="#">4</a></li>--%>
+        <%--                        <li><a href="#">5</a></li>--%>
+        <%--                        <li><a href="#">下一页</a></li>--%>
+        <%--                        <li class="disabled"><a href="#">末页</a></li>--%>
+        <%--                    </ul>--%>
+        <%--                </nav>--%>
+        <%--            </div>--%>
+        <%--        </div>--%>
 
     </div>
 
