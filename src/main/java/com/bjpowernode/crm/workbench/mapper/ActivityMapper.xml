@@ -218,9 +218,9 @@
         u.edit_time,
         u3.name as edit_by
         from tbl_activity u
-        inner join tbl_user u1 on u.owner = u1.id
-        inner join tbl_user u2 on u.create_by = u2.id
-        left join tbl_user u3 on u.create_by = u3.id
+        join tbl_user u1 on u.owner = u1.id
+        join tbl_user u2 on u.create_by = u2.id
+        left join tbl_user u3 on u.edit_by = u3.id
         <where>
             <if test="name != null and name != ''">
                 and u.name like '%' #{name} '%'
@@ -242,9 +242,9 @@
     <select id="selectActivityTotalRowByCondition" parameterType="map" resultType="int">
         select count(*)
         from tbl_activity u
-        inner join tbl_user u1 on u.owner = u1.id
-        inner join tbl_user u2 on u.create_by = u2.id
-        left join tbl_user u3 on u.create_by = u3.id
+        join tbl_user u1 on u.owner = u1.id
+        join tbl_user u2 on u.create_by = u2.id
+        left join tbl_user u3 on u.edit_by = u3.id
         <where>
             <if test="name != null and name != ''">
                 and u.name like '%' #{name} '%'
@@ -260,4 +260,34 @@
             </if>
         </where>
     </select>
+
+    <!--    根据ID删除市场活动-->
+    <delete id="deleteActivityByIds" parameterType="string">
+        delete from tbl_activity where id in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--    根据Id查询单个市场活动-->
+    <select id="selectActivityById" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_activity
+        where id = #{id}
+    </select>
+
+    <!--    修改市场活动-->
+    <update id="updateActivity" parameterType="com.bjpowernode.crm.workbench.domain.Activity">
+        update tbl_activity
+        set owner       = #{owner,jdbcType=CHAR},
+            name        = #{name,jdbcType=VARCHAR},
+            start_date  = #{startDate,jdbcType=CHAR},
+            end_date    = #{endDate,jdbcType=CHAR},
+            cost        = #{cost,jdbcType=VARCHAR},
+            description = #{description,jdbcType=VARCHAR},
+            edit_time   = #{editTime,jdbcType=CHAR},
+            edit_by     = #{editBy,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=CHAR}
+    </update>
 </mapper>

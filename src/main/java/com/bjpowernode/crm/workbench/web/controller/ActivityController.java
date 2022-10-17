@@ -91,7 +91,59 @@ public class ActivityController {
         returnMap.put("totalRow", count);
 
         return returnMap;
+    }
 
+    // 根据ID删除市场活动
+    @RequestMapping("/workbench/activity/deleteActivityByIds.do")
+    @ResponseBody
+    public Object deleteActivityByIds(String[] id) {
+        ReturnObj obj = new ReturnObj();
+        try {
+            int result = activityService.deleteActivityByIds(id);
+            if (result > 0) {
+                obj.setCode(Constants.RETURN_OBJECT_SUCCESS);
+            } else {
+                obj.setCode(Constants.RETURN_OBJECT_FAILURE);
+                obj.setMessage("系统忙，请稍后再试.....");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            obj.setCode(Constants.RETURN_OBJECT_FAILURE);
+            obj.setMessage("系统忙，请稍后再试.....");
+        }
+        return obj;
+    }
 
+    // 根据ID查询单个市场活动
+    @RequestMapping("/workbench/activity/queryActivityById.do")
+    @ResponseBody
+    public Object queryActivityById(String id) {
+        return activityService.queryActivityById(id);
+    }
+
+    // 更新市场活动
+    @RequestMapping("/workbench/activity/updateActivity.do")
+    @ResponseBody
+    public Object updateActivity(Activity activity, HttpSession session) {
+        ReturnObj obj = new ReturnObj();
+        // 添加数据
+        activity.setEditTime(DateUtils.getFormatDate(new Date()));
+        User currentUser = (User) session.getAttribute(Constants.SESSION_USER_KEY);
+        activity.setEditBy(currentUser.getName());
+        try {
+            int result = activityService.updateActivity(activity);
+            if (result > 0) {
+                obj.setCode(Constants.RETURN_OBJECT_SUCCESS);
+            } else {
+                obj.setCode(Constants.RETURN_OBJECT_FAILURE);
+                obj.setMessage("系统繁忙.......");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            obj.setCode(Constants.RETURN_OBJECT_FAILURE);
+            obj.setMessage("系统繁忙.......");
+        }
+
+        return obj;
     }
 }

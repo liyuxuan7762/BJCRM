@@ -29,4 +29,19 @@ public class ActivityServiceImpl implements ActivityService {
     public int queryActivityTotalRowByCondition(Map<String, Object> map) {
         return mapper.selectActivityTotalRowByCondition(map);
     }
+
+    @Override
+    public int deleteActivityByIds(String[] ids) {
+        return mapper.deleteActivityByIds(ids);
+    }
+
+    @Override
+    public Activity queryActivityById(String id) {
+        return mapper.selectActivityById(id);
+    }
+
+    @Override
+    public int updateActivity(Activity activity) {
+        return mapper.updateActivity(activity);
+    }
 }
