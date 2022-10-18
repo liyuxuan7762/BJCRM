@@ -3,18 +3,25 @@ package com.bjpowernode.crm.workbench.web.controller;
 import com.bjpowernode.crm.commons.constants.Constants;
 import com.bjpowernode.crm.commons.domain.ReturnObj;
 import com.bjpowernode.crm.commons.utils.DateUtils;
+import com.bjpowernode.crm.commons.utils.ExportUtils;
 import com.bjpowernode.crm.commons.utils.UUIDUtils;
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.settings.service.UserService;
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.service.ActivityService;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +73,6 @@ public class ActivityController {
         }
         return obj; // 返回json对象
     }
-
 
     // 根据条件分页查询市场活动
     @RequestMapping("/workbench/activity/queryActivity.do")
@@ -129,7 +135,7 @@ public class ActivityController {
         // 添加数据
         activity.setEditTime(DateUtils.getFormatDate(new Date()));
         User currentUser = (User) session.getAttribute(Constants.SESSION_USER_KEY);
-        activity.setEditBy(currentUser.getName());
+        activity.setEditBy(currentUser.getId());
         try {
             int result = activityService.updateActivity(activity);
             if (result > 0) {
@@ -145,5 +151,19 @@ public class ActivityController {
         }
 
         return obj;
+    }
+
+    // 批量导出所有市场活动
+    @RequestMapping("/workbench/activity/exportAllActivities.do")
+    public void exportAllActivities(HttpServletResponse response) throws Exception {
+        // 1.调用业务方法查询所有市场活动
+        List<Activity> activityList = activityService.queryAllActivities();
+        HSSFWorkbook wb = ExportUtils.exportExcel(activityList, "市场活动列表");
+        response.setContentType("application/octet-stream;charset=UTF-8"); // 设置相应格式 不同的文件后缀名对应不同的格式
+        response.addHeader("Content-Disposition", "attachment;filename=activityList.xls");
+        OutputStream os = response.getOutputStream();
+        wb.write(os);
+        wb.close();
+        os.flush();
     }
 }

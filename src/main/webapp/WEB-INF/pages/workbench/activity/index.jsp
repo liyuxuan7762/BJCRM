@@ -263,7 +263,12 @@
                         }
                     }
                 });
-            })
+            });
+
+            // 给批量下载添加单击事件
+            $("#exportActivityAllBtn").click(function () {
+                window.location.href = "workbench/activity/exportAllActivities.do";
+            });
         });
 
         function queryActivityByConditionForPage(pageNo, pageSize) {

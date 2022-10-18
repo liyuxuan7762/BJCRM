@@ -235,6 +235,7 @@
                 and u.end_date &lt; #{end_date}
             </if>
         </where>
+        order by create_time desc
         limit #{beginNo}, #{pageSize}
     </select>
 
@@ -290,4 +291,23 @@
             edit_by     = #{editBy,jdbcType=VARCHAR}
         where id = #{id,jdbcType=CHAR}
     </update>
+
+    <select id="selectAllActivities" resultMap="BaseResultMap">
+        select u.id,
+               u1.name as owner,
+               u.name,
+               start_date,
+               end_date,
+               cost,
+               description,
+               create_time,
+               u2.name as create_by,
+               u.edit_time,
+               u3.name as edit_by
+        from tbl_activity u
+                 join tbl_user u1 on u.owner = u1.id
+                 join tbl_user u2 on u.create_by = u2.id
+                 left join tbl_user u3 on u.edit_by = u3.id
+        order by create_time desc
+    </select>
 </mapper>
