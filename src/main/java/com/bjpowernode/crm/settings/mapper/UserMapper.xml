@@ -223,4 +223,13 @@
         from tbl_user
         where lock_state = '1'
     </select>
+
+    <select id="getUserByName" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_user
+        where name = #{name}
+    </select>
+
+
 </mapper>

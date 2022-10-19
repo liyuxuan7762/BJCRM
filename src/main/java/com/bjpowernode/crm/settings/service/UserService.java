@@ -10,4 +10,7 @@ public interface UserService {
 
     // 查询所有用户
     List<User> queryAllUsers();
+
+    // 根据姓名查询用户
+    User queryUserByName(String name);
 }

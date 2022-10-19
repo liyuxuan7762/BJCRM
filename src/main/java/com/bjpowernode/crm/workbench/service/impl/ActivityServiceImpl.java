@@ -49,4 +49,9 @@ public class ActivityServiceImpl implements ActivityService {
     public List<Activity> queryAllActivities() {
         return mapper.selectAllActivities();
     }
+
+    @Override
+    public int saveCreatedActivityByList(List<Activity> activityList) {
+        return mapper.insertActivityByList(activityList);
+    }
 }

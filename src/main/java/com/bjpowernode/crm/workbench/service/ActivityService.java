@@ -26,4 +26,7 @@ public interface ActivityService {
 
     // 查询所有市场活动
     List<Activity> queryAllActivities();
+
+    // 批量插入市场活动
+    int saveCreatedActivityByList(List<Activity> activityList);
 }

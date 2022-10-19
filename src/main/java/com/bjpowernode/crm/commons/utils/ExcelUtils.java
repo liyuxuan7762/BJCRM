@@ -1,5 +1,6 @@
 package com.bjpowernode.crm.commons.utils;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -7,7 +8,28 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class ExportUtils {
+public class ExcelUtils {
+    public static String getCellValueForString(HSSFCell cell) {
+        String result = "";
+        switch (cell.getCellType()) {
+            case HSSFCell.CELL_TYPE_STRING:
+                result = cell.getStringCellValue();
+                break;
+            case HSSFCell.CELL_TYPE_NUMERIC:
+                result = Double.toString(cell.getNumericCellValue());
+                break;
+            case HSSFCell.CELL_TYPE_BOOLEAN:
+                result = cell.getBooleanCellValue() + "";
+                break;
+            case HSSFCell.CELL_TYPE_FORMULA:
+                result = cell.getCellFormula();
+                break;
+            default:
+                result = "";
+        }
+        return result;
+    }
+
     public static HSSFWorkbook exportExcel(List list, String sheetName) throws NoSuchFieldException, IllegalAccessException {
         // 1.创建Excel文件
         // 2.创建工作簿

@@ -38,8 +38,8 @@
         </mvc:interceptor>
     </mvc:interceptors>
     <!-- 配置文件上传解析器 id:必须是multipartResolver-->
-    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="#{1024*1024*80}"/>
         <property name="defaultEncoding" value="utf-8"/>
-    </bean>-->
+    </bean>
 </beans>

@@ -23,4 +23,9 @@ public class UserServiceImpl implements UserService {
     public List<User> queryAllUsers() {
         return mapper.selectAllUsers();
     }
+
+    @Override
+    public User queryUserByName(String name) {
+        return mapper.getUserByName(name);
+    }
 }

@@ -310,4 +310,13 @@
                  left join tbl_user u3 on u.edit_by = u3.id
         order by create_time desc
     </select>
+
+    <insert id="insertActivityByList" parameterType="com.bjpowernode.crm.workbench.domain.Activity">
+        insert into tbl_activity(id, owner, name, start_date, end_date, cost, description, create_time, create_by)
+        values
+        <foreach collection="list" item="obj" separator=",">
+            (#{obj.id}, #{obj.owner}, #{obj.name}, #{obj.start_date}, #{obj.end_date}, #{obj.cost}, #{obj.description},
+            #{obj.create_time}, #{obj.create_by})
+        </foreach>
+    </insert>
 </mapper>

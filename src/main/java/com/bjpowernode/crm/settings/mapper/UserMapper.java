@@ -59,4 +59,7 @@ public interface UserMapper {
 
     // 查询所有用户
     List<User> selectAllUsers();
+
+    // 根据姓名查询用户
+    User getUserByName(String name);
 }
