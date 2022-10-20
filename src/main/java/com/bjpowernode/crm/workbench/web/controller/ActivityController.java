@@ -8,6 +8,8 @@ import com.bjpowernode.crm.commons.utils.UUIDUtils;
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.settings.service.UserService;
 import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
+import com.bjpowernode.crm.workbench.service.ActivityRemarkService;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -32,6 +34,9 @@ public class ActivityController {
     private UserService userService;
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private ActivityRemarkService activityRemarkService;
 
     // 显示Activity的主页面，完成动态数据的加载
     @RequestMapping("/workbench/activity/index.do")
@@ -168,19 +173,19 @@ public class ActivityController {
     // 导入市场活动
     @RequestMapping("/workbench/activity/importActivity.do")
     @ResponseBody
-    public Object importActivity(MultipartFile file, HttpSession session) {
+    public Object importActivity(MultipartFile activityFile, HttpSession session) {
         List<Activity> activityList = new ArrayList<>();
         ReturnObj obj = new ReturnObj();
         try {
             // 1.获取用户上传文件的输入流，然后解析成excel文件
-            HSSFWorkbook wb = new HSSFWorkbook(file.getInputStream());
+            HSSFWorkbook wb = new HSSFWorkbook(activityFile.getInputStream());
             // 2.解析excel文件
             HSSFSheet sheet = wb.getSheetAt(0); // 获取第一个工作表
             HSSFRow row = null;
             HSSFCell cell = null;
             Activity activity = null;
 
-            // 表结构 所属者 开始时间 结束时间 花费 活动描述
+            // 表结构 所属者 活动名称 开始时间 结束时间 花费 活动描述
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 // 设置新的Activity的一些属性
                 activity = new Activity();
@@ -199,32 +204,34 @@ public class ActivityController {
                             activity.setOwner(userService.queryUserByName(value).getId());
                             break;
                         case 1:
+                            activity.setName(value);
+                        case 2:
                             activity.setStartDate(value);
                             break;
-                        case 2:
+                        case 3:
                             activity.setEndDate(value);
                             break;
-                        case 3:
+                        case 4:
                             activity.setCost(value);
                             break;
-                        case 4:
+                        case 5:
                             activity.setDescription(value);
                             break;
                     }
                 }
                 activityList.add(activity);
-
-                // 3.调用业务层方法
-                int result = activityService.saveCreatedActivityByList(activityList);
-                if (result > 0) {
-                    // 插入成功
-                    obj.setCode(Constants.RETURN_OBJECT_SUCCESS);
-                    obj.setMessage("成功添加了" + result + "条记录");
-                } else {
-                    obj.setCode(Constants.RETURN_OBJECT_FAILURE);
-                    obj.setCode("系统繁忙，添加失败......");
-                }
             }
+            // 3.调用业务层方法
+            int result = activityService.saveCreatedActivityByList(activityList);
+            if (result > 0) {
+                // 插入成功
+                obj.setCode(Constants.RETURN_OBJECT_SUCCESS);
+                obj.setMessage("成功添加了" + result + "条记录");
+            } else {
+                obj.setCode(Constants.RETURN_OBJECT_FAILURE);
+                obj.setCode("系统繁忙，添加失败......");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             obj.setCode(Constants.RETURN_OBJECT_FAILURE);
@@ -232,4 +239,18 @@ public class ActivityController {
         }
         return obj;
     }
+
+    // 显示市场活动明细
+    @RequestMapping("/workbench/activity/activityDetail.do")
+    public String activityDetail(String activityId, HttpServletRequest request) {
+        // 调用业务层方法
+        Activity activity = activityService.queryActivityByIdForDetail(activityId);
+        List<ActivityRemark> activityRemarkList = activityRemarkService.queryActivityRemarkByActivityId(activityId);
+        // 保存到作用域中
+        request.setAttribute("activity", activity);
+        request.setAttribute("activityRemarkList", activityRemarkList);
+
+        return "workbench/activity/detail";
+    }
+
 }

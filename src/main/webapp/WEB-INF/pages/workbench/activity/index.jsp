@@ -269,6 +269,59 @@
             $("#exportActivityAllBtn").click(function () {
                 window.location.href = "workbench/activity/exportAllActivities.do";
             });
+
+            // 给导入按钮添加单击事件
+            $("#importActivityBtn").click(function () {
+                // 1.获取文件名，判断是否是xls文件
+                var fileName = $("#activityFile").val();
+                var ext = fileName.substring(fileName.lastIndexOf(".") + 1).toLocaleLowerCase();
+                if (ext != "xls") {
+                    alert("仅支持xls文件");
+                    return;
+                }
+                // 2.获取文件，判断文件大小
+                // 文件真实存储在文件上传组件的DOM对象的files属性中，files属性是一个数组，支持多个文件
+                // 这里就取第一个即可
+                var activityFile = $("#activityFile")[0].files[0];
+                alert(activityFile);
+                if (activityFile.size > 5 * 1024 * 1024) {
+                    alert("仅支持5MB一下的xls文件");
+                    return;
+                }
+
+                // 3.使用ajax异步上传文件
+                // 由于要上传的文件是一个二进制文件，不是不可以转化为字符串，因此传统的使用
+                // data中使用{K:V}方式不可以 需要引入formData对象来进行设置
+                var formData = new FormData();
+                // 将文件放在formData中 当然 formData中也可以存储字符串类型
+                formData.append("activityFile", activityFile);
+                // formData.append("name", "test");
+                $.ajax({
+                    url: "workbench/activity/importActivity.do",
+                    type: "post",
+                    dataType: "json",
+                    processData: false, // 设置不转字符串
+                    contentType: false, // 不转utf-8 ! 这里是contentType 不是Context
+                    data: formData,
+                    // 由于传统的表单提交数据会将所有的data转换成字符串，然后统一编码成UTF-8
+                    // 但是对于提交的文件来说，不应该转化成字符串，也不应该编码
+                    // 因此需要设置
+
+                    success: function (data) {
+                        if (data.code == 1) {
+                            // 添加成功
+                            alert(data.message);
+                            // 关闭模态窗口
+                            $("#importActivityModal").modal("hide");
+                            queryActivityByConditionForPage(1, $("#pagination").bs_pagination("getOption", "rowsPerPage"));
+                        } else {
+                            alert(data.message);
+                            $("#importActivityModal").modal("show");
+                        }
+                    }
+                });
+
+            });
         });
 
         function queryActivityByConditionForPage(pageNo, pageSize) {
@@ -298,7 +351,7 @@
                     $.each(data.activityList, function (index, obj) {
                         htmlStr += "<tr class=\"active\">";
                         htmlStr += "<td><input type=\"checkbox\" value=\"" + obj.id + "\"/></td>";
-                        htmlStr += "<td><a style=\"text-decoration: none; cursor: pointer; onclick=\"window.location.href='detail.html'\">" + obj.name + "</a></td>";
+                        htmlStr += "<td><a style=\"text-decoration: none; cursor: pointer; onclick=\"window.location.href='workbench/activity/activityDetail.do?activityId=" + obj.id+"'\">" + obj.name + "</a></td>";
                         htmlStr += "<td>" + obj.owner + "</td>";
                         htmlStr += "<td>" + obj.startDate + "</td>";
                         htmlStr += "<td>" + obj.endDate + "</td>";
@@ -590,7 +643,7 @@
                 <tr class="active">
                     <td><input type="checkbox"/></td>
                     <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">发传单</a></td>
+                           onclick="window.location.href='detail.jsp';">发传单</a></td>
                     <td>zhangsan</td>
                     <td>2020-10-10</td>
                     <td>2020-10-20</td>
@@ -598,7 +651,7 @@
                 <tr class="active">
                     <td><input type="checkbox"/></td>
                     <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">发传单</a></td>
+                           onclick="window.location.href='detail.jsp';">发传单</a></td>
                     <td>zhangsan</td>
                     <td>2020-10-10</td>
                     <td>2020-10-20</td>

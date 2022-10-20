@@ -315,8 +315,27 @@
         insert into tbl_activity(id, owner, name, start_date, end_date, cost, description, create_time, create_by)
         values
         <foreach collection="list" item="obj" separator=",">
-            (#{obj.id}, #{obj.owner}, #{obj.name}, #{obj.start_date}, #{obj.end_date}, #{obj.cost}, #{obj.description},
-            #{obj.create_time}, #{obj.create_by})
+            (#{obj.id}, #{obj.owner}, #{obj.name}, #{obj.startDate}, #{obj.endDate}, #{obj.cost}, #{obj.description},
+            #{obj.createTime}, #{obj.createBy})
         </foreach>
     </insert>
+
+    <select id="selectActivityByIdForDetail" parameterType="string" resultMap="BaseResultMap">
+        select u.id,
+               u1.name as owner,
+               u.name,
+               start_date,
+               end_date,
+               cost,
+               description,
+               create_time,
+               u2.name as create_by,
+               u.edit_time,
+               u3.name as edit_by
+        from tbl_activity u
+                 join tbl_user u1 on u.owner = u1.id
+                 join tbl_user u2 on u.create_by = u2.id
+                 left join tbl_user u3 on u.edit_by = u3.id
+        where u.id = #{id}
+    </select>
 </mapper>

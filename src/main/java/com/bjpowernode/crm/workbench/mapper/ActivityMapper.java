@@ -79,4 +79,7 @@ public interface ActivityMapper {
     // 批量插入市场活动
     int insertActivityByList(List<Activity> activityList);
 
+    // 查询市场活动详细信息
+    Activity selectActivityByIdForDetail(String id);
+
 }

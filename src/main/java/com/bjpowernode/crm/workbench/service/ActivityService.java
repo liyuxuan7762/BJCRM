@@ -29,4 +29,7 @@ public interface ActivityService {
 
     // 批量插入市场活动
     int saveCreatedActivityByList(List<Activity> activityList);
+
+    // 根据ID查询市场活动详细信息
+    Activity queryActivityByIdForDetail(String id);
 }
