@@ -17,4 +17,9 @@ public class ActivityRemarkServiceImpl implements ActivityRemarkService {
     public List<ActivityRemark> queryActivityRemarkByActivityId(String activityId) {
         return  mapper.selectActivityRemarkByActivityId(activityId);
     }
+
+    @Override
+    public int saveCreateActivityRemark(ActivityRemark activityRemark) {
+        return mapper.insertActivityRemark(activityRemark);
+    }
 }

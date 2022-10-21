@@ -55,4 +55,7 @@ public interface ActivityRemarkMapper {
 
     // 根据市场活动ID查询市场活动评论
     List<ActivityRemark> selectActivityRemarkByActivityId(String activityId);
+
+    // 插入一条市场活动评论
+    int insertActivityRemark(ActivityRemark activityRemark);
 }

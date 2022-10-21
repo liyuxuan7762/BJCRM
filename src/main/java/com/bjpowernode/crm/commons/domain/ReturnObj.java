@@ -5,6 +5,8 @@ public class ReturnObj {
     public String code;
     public String message;
 
+    public Object retData;
+
     public ReturnObj() {
     }
 
@@ -22,5 +24,13 @@ public class ReturnObj {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Object getRetData() {
+        return retData;
+    }
+
+    public void setRetData(Object retData) {
+        this.retData = retData;
     }
 }

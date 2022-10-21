@@ -351,7 +351,7 @@
                     $.each(data.activityList, function (index, obj) {
                         htmlStr += "<tr class=\"active\">";
                         htmlStr += "<td><input type=\"checkbox\" value=\"" + obj.id + "\"/></td>";
-                        htmlStr += "<td><a style=\"text-decoration: none; cursor: pointer; onclick=\"window.location.href='workbench/activity/activityDetail.do?activityId=" + obj.id+"'\">" + obj.name + "</a></td>";
+                        htmlStr+="<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='workbench/activity/activityDetail.do?activityId="+obj.id+"'\">"+obj.name+"</a></td>";
                         htmlStr += "<td>" + obj.owner + "</td>";
                         htmlStr += "<td>" + obj.startDate + "</td>";
                         htmlStr += "<td>" + obj.endDate + "</td>";

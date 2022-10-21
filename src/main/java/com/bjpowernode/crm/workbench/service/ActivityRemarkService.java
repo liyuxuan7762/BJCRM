@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface ActivityRemarkService {
     List<ActivityRemark> queryActivityRemarkByActivityId(String activityId);
+
+    // 插入一条市场活动评论
+    int saveCreateActivityRemark(ActivityRemark activityRemark);
 }

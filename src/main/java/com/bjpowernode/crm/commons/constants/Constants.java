@@ -5,4 +5,8 @@ public class Constants {
     public static final String RETURN_OBJECT_SUCCESS = "1";
     public static final String RETURN_OBJECT_FAILURE = "0";
     public static final String SESSION_USER_KEY = "sessionUser";
+
+    public static final String REMARK_EDIT_FLAG_NO_EDITED = "0";
+
+    public static final String REMARK_EDIT_FLAG_EDITED = "1";
 }
