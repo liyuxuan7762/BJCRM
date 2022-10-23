@@ -70,6 +70,43 @@
                 $(this).children("span").css("color", "#E6E6E6");
             });
 
+            $("#remarkDivList").on("click", "a[name='deleteA']", function () {
+                // 获取到要删除的评论ID
+                // $(this) 将DOM对象转换成jQuery对象
+                var remarkId = $(this).attr("remarkId");
+                // 发送删除请求
+                $.ajax({
+                    url: "workbench/activity/deleteRemark.do",
+                    data: {
+                        remarkId: remarkId
+                    },
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+                        if(data.code == 1) {
+                            // 删除成功 删除掉评论对应的div
+                            // 为了防止Id重复，可以使用标签名_id的方式来解决
+                            // 获取到要删除的div
+                            $("#div_" + remarkId).remove();
+                        } else {
+                            alert(data.message);
+                        }
+                    }
+                })
+            });
+
+            $("#remarkDivList").on("click", "a[name='editA']", function () {
+                // 获取评论ID
+                var remarkId = $(this).attr("remarkId");
+                // 获取评论内容 根据id找到最外面的div，然后使用父子选择器选择div下面的h5标签
+                var noteContent = $("#div_" + remarkId + " h5").text();
+
+                // 将数据写入到模态窗口
+                $("#remarkId").val(remarkId);
+                $("#noteContent").val(noteContent);
+                // 显示窗口
+                $("#editRemarkModal").modal("show");
+            });
             // 给保存按钮添加单击事件
             $("#saveBtn").click(function () {
                 var remark = $.trim($("#remark").val());
@@ -117,6 +154,42 @@
                     }
                 });
             });
+
+            // 给模态窗口的更新按钮添加事件
+            $("#updateRemarkBtn").click(function () {
+                // 验证评论区是否为空
+                var remarkId = $("#remarkId").val();
+                var noteContent = $.trim($("#noteContent").val());
+                if(noteContent == "") {
+                    alert("评论不能为空");
+                    return;
+                }
+                // 向后台发送数据
+                $.ajax({
+                    url: "workbench/activity/editRemark.do",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        id: remarkId,
+                        noteContent: noteContent
+                    },
+                    success: function (data) {
+                        if(data.code == 1) {
+                            // 修改成功 关闭模态窗口 更新页面
+                            $("#editRemarkModal").modal("hide");
+                            // 重新设置信息
+                            // 设置内容信息
+                            $("#div_" + data.retData.id + " h5").val(data.retData.noteContent);
+                            $("#div_" + data.retData.id + " small").text(" " + data.retData.editTime + "由${sessionScope.sessionUser.name}修改");
+
+                        } else {
+                            // 更新失败
+                            alert(data.message);
+                            $("#editRemarkModal").modal("show");
+                        }
+                    }
+                });
+            })
         });
 
     </script>
@@ -230,7 +303,7 @@
 
     <c:forEach items="${activityRemarkList}" var="remark">
         <!-- 备注1 -->
-        <div class="remarkDiv" style="height: 60px;">
+        <div id="div_${remark.id}" class="remarkDiv" style="height: 60px;">
             <img title="${remark.createBy}" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
             <div style="position: relative; top: -40px; left: 40px;">
                 <h5>${remark.noteContent}</h5>
@@ -238,11 +311,11 @@
                     style="color: gray;"> ${remark.editFlag=='1'?remark.editTime:remark.createTime}
                 由${remark.editFlag=='1'?remark.editBy:remark.createBy}${remark.editFlag=='1'?'修改':'创建'}</small>
                 <div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">
-                    <a class="myHref" remarkId="${remark.id}" href="javascript:void(0);"><span
+                    <a class="myHref" name="editA" remarkId="${remark.id}" href="javascript:void(0);"><span
                             class="glyphicon glyphicon-edit"
                             style="font-size: 20px; color: #E6E6E6;"></span></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a class="myHref" remarkId="${remark.id}" href="javascript:void(0);"><span
+                    <a class="myHref" name="deleteA" remarkId="${remark.id}" href="javascript:void(0);"><span
                             class="glyphicon glyphicon-remove"
                             style="font-size: 20px; color: #E6E6E6;"></span></a>
                 </div>

@@ -191,4 +191,21 @@
         values (#{id,jdbcType=CHAR}, #{noteContent,jdbcType=VARCHAR}, #{createTime,jdbcType=CHAR},
                 #{createBy,jdbcType=VARCHAR}, #{activityId,jdbcType=CHAR}, #{editFlag,jdbcType=CHAR})
     </insert>
+
+    <!--    删除一条市场活动评论-->
+    <delete id="deleteActivityRemark" parameterType="string">
+        delete
+        from tbl_activity_remark
+        where id = #{id}
+    </delete>
+
+    <!--    修改评论-->
+    <update id="updateActivityRemark" parameterType="com.bjpowernode.crm.workbench.domain.ActivityRemark">
+        update tbl_activity_remark
+        set note_content = #{noteContent,jdbcType=VARCHAR},
+            edit_time    = #{editTime,jdbcType=CHAR},
+            edit_by      = #{editBy,jdbcType=VARCHAR},
+            edit_flag    = #{editFlag,jdbcType=CHAR}
+        where id = #{id,jdbcType=CHAR}
+    </update>
 </mapper>

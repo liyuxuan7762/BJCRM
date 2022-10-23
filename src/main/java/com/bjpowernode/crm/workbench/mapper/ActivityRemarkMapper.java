@@ -58,4 +58,10 @@ public interface ActivityRemarkMapper {
 
     // 插入一条市场活动评论
     int insertActivityRemark(ActivityRemark activityRemark);
+
+    // 删除一条市场活动评论
+    int deleteActivityRemark(String remarkId);
+
+    // 修改评论
+    int updateActivityRemark(ActivityRemark activityRemark);
 }
