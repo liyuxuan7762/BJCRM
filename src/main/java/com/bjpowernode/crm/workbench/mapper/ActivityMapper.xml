@@ -338,4 +338,28 @@
                  left join tbl_user u3 on u.edit_by = u3.id
         where u.id = #{id}
     </select>
+
+    <!--    根据线索id查询市场活动信息-->
+    <select id="selectActivityByClueId" parameterType="string" resultMap="BaseResultMap">
+        select a.id,
+               a.name,
+               a.start_date,
+               a.end_date,
+               u.name as owner
+        from tbl_activity a
+                 inner join tbl_user u on u.id = a.owner
+                 inner join tbl_clue_activity_relation car on car.activity_id = a.id
+        where car.clue_id = #{clueId}
+    </select>
+
+    <select id="selectActivityExcludeByClueId" parameterType="map" resultMap="BaseResultMap">
+        select a.id, a.name, a.start_date, a.end_date, u.name as owner
+        from tbl_activity a
+                 inner join tbl_user u on u.id = a.owner
+        where a.name like "%" #{activityName} "%" and a.id not in (
+        select activity_id
+        from tbl_clue_activity_relation
+        where clue_id = #{clueId}
+            )
+    </select>
 </mapper>

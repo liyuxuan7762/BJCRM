@@ -24,26 +24,27 @@
         $(function () {
             // 给保存clue按钮添加单击事件
             $("#saveClueBtn").click(function () {
-                // 收集数据
                 var id = $.trim($("create-id").val());
-                var fullname = $.trim($("create-fullname").val());
-                var appellation = $.trim($("create-appellation").val());
-                var owner = $.trim($("create-owner").val());
-                var company = $.trim($("create-company").val());
-                var job = $.trim($("create-job").val());
-                var email = $.trim($("create-email").val());
-                var phone = $.trim($("create-phone").val());
-                var website = $.trim($("create-website").val());
-                var mphone = $.trim($("create-mphone").val());
-                var state = $.trim($("create-state").val());
-                var source = $.trim($("create-source").val());
-                var createBy = $.trim($("create-createBy").val());
-                var createTime = $.trim($("create-createTime").val());
-                var description = $.trim($("create-description").val());
-                var contactSummary = $.trim($("create-contactSummary").val());
-                var nextContactTime = $.trim($("create-nextContactTime").val());
-                var address = $.trim($("create-address").val());
+                var fullname = $.trim($("#create-fullname").val());
+                var appellation = $.trim($("#create-appellation").val());
+                var owner = $.trim($("#create-owner").val());
+                var company = $.trim($("#create-company").val());
+                var job = $.trim($("#create-job").val());
+                var email = $.trim($("#create-email").val());
+                var phone = $.trim($("#create-phone").val());
+                var website = $.trim($("#create-website").val());
+                var mphone = $.trim($("#create-mphone").val());
+                var state = $.trim($("#create-status").val());
+                var source = $.trim($("#create-source").val());
+                var createBy = $.trim($("#create-createBy").val());
+                var createTime = $.trim($("#create-createTime").val());
+                var description = $.trim($("#create-description").val());
+                var contactSummary = $.trim($("#create-contactSummary").val());
+                var nextContactTime = $.trim($("#create-nextContactTime").val());
+                var address = $.trim($("#create-address").val());
 
+
+                alert(appellation);
                 // 合法性验证 (省略)
 
                 // 发送请求并处理请求
@@ -492,7 +493,7 @@
                 <tr>
                     <td><input type="checkbox"/></td>
                     <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">李四先生</a></td>
+                           onclick="window.location.href='workbench/clue/clueDetail.do?clueId=06f5fc056eac41558a964f96daa7f27c';">李四先生</a></td>
                     <td>动力节点</td>
                     <td>010-84846003</td>
                     <td>12345678901</td>
@@ -503,7 +504,7 @@
                 <tr class="active">
                     <td><input type="checkbox"/></td>
                     <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">李四先生</a></td>
+                           onclick="window.location.href='detail.jsp';">李四先生</a></td>
                     <td>动力节点</td>
                     <td>010-84846003</td>
                     <td>12345678901</td>

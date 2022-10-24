@@ -316,4 +316,36 @@
                 #{mphone}, #{state}, #{source}, #{createBy}, #{createTime}, #{description}, #{contactSummary},
                 #{nextContactTime}, #{address})
     </insert>
+
+    <!--    根据线索Id查找线索信息 -->
+    <select id="selectClueDetail" parameterType="string" resultMap="BaseResultMap">
+        select
+            c.id,
+            c.fullname,
+            dic1.value as appellation,
+            u1.name as owner,
+            c.company,
+            c.job,
+            c.email,
+            c.phone,
+            c.website,
+            c.mphone,
+            dic2.value as state,
+            dic3.value as source,
+            u2.name as create_by,
+            c.create_time,
+            u3.name as edit_by,
+            c.edit_time,
+            c.description,
+            c.contact_summary,
+            c.next_contact_time,
+            c.address
+        from tbl_clue c
+        left join tbl_dic_value dic1 on c.appellation = dic1.id
+        inner join tbl_user u1 on c.owner = u1.id
+        left join tbl_dic_value dic2 on c.state = dic2.id
+        left join tbl_dic_value dic3 on c.source = dic3.id
+        inner join tbl_user u2 on c.create_by = u2.id
+        left join tbl_user u3 on c.edit_by = u3.id
+    </select>
 </mapper>

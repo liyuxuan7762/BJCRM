@@ -53,4 +53,7 @@ public interface ClueMapper {
 
     // 插入一条线索
     int insertClue(Clue clue);
+
+    // 根据线索ID查找线索详细信息
+    Clue selectClueDetail(String id);
 }

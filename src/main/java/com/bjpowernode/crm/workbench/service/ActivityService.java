@@ -32,4 +32,8 @@ public interface ActivityService {
 
     // 根据ID查询市场活动详细信息
     Activity queryActivityByIdForDetail(String id);
+
+    List<Activity> queryActivityByClueId(String clueId);
+
+    List<Activity> queryActivityExcludeByClueId(Map<String, Object> map);
 }
