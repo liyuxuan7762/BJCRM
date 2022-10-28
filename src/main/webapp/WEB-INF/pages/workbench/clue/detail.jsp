@@ -92,7 +92,90 @@
                 });
             });
 
-            // 给关联市场活动按钮添加单击事件
+
+            // 给关联市场活动添加单击事件
+            $("#bundActivityBtn").click(function () {
+                // 每次点击关联市场按钮都清空之前的搜索记录
+                $("#searchActivityTxt").val("");
+                $("#tBody").html("");
+                $("#bundModal").modal("show");
+            })
+
+            // 给关联按钮添加单击事件
+            $("#bindBtn").click(function () {
+                // 获取所有选中的checkbox
+                var checked = $("#tbody input[type='checkbox']:checked");
+                // 合法性判断
+                if (checked.size() == 0) {
+                    alert("请至少选择一个市场活动");
+                    return;
+                }
+                // 拼接参数
+                var ids = "";
+                $.each(checked, function (index, obj) {
+                    ids += "activityId=" + this.value + "&";
+                });
+                ids += "clueId=${clue.id}";
+                // 发送请求
+                $.ajax({
+                    url: "workbench/clue/saveCreateActivityClueRelation.do",
+                    data: ids,
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 1) {
+                            // 成功 刷新列表 模态窗口关闭
+                            $("#bundModal").modal("hide");
+                            var html = "";
+                            $.each(data.retData, function (index, obj) {
+                                html += "<tr id=\"tr_" + obj.id + "\">";
+                                html += "<td>" + obj.name + "</td>";
+                                html += "<td>" + obj.startDate + "</td>";
+                                html += "<td>" + obj.endDate + "</td>";
+                                html += "<td>" + obj.owner + "</td>";
+                                html += "<td><a href=\"javascript:void(0);\" activityId=\"" + obj.id + "\" style=\"text-decoration: none;\"><span class=\"glyphicon glyphicon-remove\"></span>解除关联</a></td>";
+                                html += "</tr>";
+                            });
+                            $("#relationTboy").html(html);
+                        } else {
+                            alert(obj.message);
+                            $("#bundModal").modal("show");
+                        }
+                    }
+
+                });
+            });
+
+            $("#relationTboy").on("click", "a", function () {
+                var activityId = $(this).attr("activityId");
+                var clueId = "${clue.id}";
+                if (window.confirm("确认要解除关联吗？")) {
+                    $.ajax({
+                        url: "workbench/clue/unbindActivity.do",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            activityId: activityId,
+                            clueId: clueId
+                        },
+                        success: function (data) {
+                            if (data.code == 1) {
+                                // 如果成功 刷新列表
+                                $("#tr_" + activityId).remove();
+                            } else {
+                                alert(data.message);
+                            }
+                        }
+                    })
+                }
+            });
+
+            // 给转换按钮添加单击事件
+            $("#switchBtn").click(function () {
+                window.location.href="workbench/clue/toConvert.do?id=" + "${clue.id}";
+            });
+
+
         });
 
     </script>
@@ -151,7 +234,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+                <button type="button" class="btn btn-primary" id="bindBtn">关联</button>
             </div>
         </div>
     </div>
@@ -170,7 +253,7 @@
         <h3>${clue.fullname}${clue.appellation} <small>${clue.company}</small></h3>
     </div>
     <div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
-        <button type="button" class="btn btn-default" onclick="window.location.href='convert.html';"><span
+        <button type="button" class="btn btn-default" id="switchBtn"><span
                 class="glyphicon glyphicon-retweet"></span> 转换
         </button>
 
@@ -353,9 +436,9 @@
                     <td></td>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="relationTboy">
                 <c:forEach items="${activityList}" var="act">
-                    <tr>
+                    <tr id="tr_${act.id}">
                         <td>${act.name}</td>
                         <td>${act.startDate}</td>
                         <td>${act.endDate}</td>

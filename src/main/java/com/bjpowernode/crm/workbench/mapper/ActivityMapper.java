@@ -88,4 +88,7 @@ public interface ActivityMapper {
     // 查询所有没有关联该clueId的市场活动信息
     List<Activity> selectActivityExcludeByClueId(Map<String, Object> map);
 
+    // 查询所有关联该clueId的市场活动信息
+    List<Activity> selectActivityIncludeByClueId(Map<String, Object> map);
+
 }

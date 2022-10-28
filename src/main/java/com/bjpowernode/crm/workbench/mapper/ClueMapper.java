@@ -56,4 +56,7 @@ public interface ClueMapper {
 
     // 根据线索ID查找线索详细信息
     Clue selectClueDetail(String id);
+
+    // 根据线索ID查询线索信息 不需要联表查询
+    Clue selectClueById(String id);
 }

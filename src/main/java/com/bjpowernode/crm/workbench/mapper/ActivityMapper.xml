@@ -362,4 +362,16 @@
         where clue_id = #{clueId}
             )
     </select>
+
+    <select id="selectActivityIncludeByClueId" parameterType="map" resultMap="BaseResultMap">
+        select a.id, a.name, a.start_date, a.end_date, u.name as owner
+        from tbl_activity a
+                 inner join tbl_user u on u.id = a.owner
+        where a.name like "%" #{activityName} "%" and a.id in (
+        select activity_id
+        from tbl_clue_activity_relation
+        where clue_id = #{clueId}
+            )
+    </select>
+
 </mapper>

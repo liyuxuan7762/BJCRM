@@ -36,4 +36,6 @@ public interface ActivityService {
     List<Activity> queryActivityByClueId(String clueId);
 
     List<Activity> queryActivityExcludeByClueId(Map<String, Object> map);
+
+    List<Activity> queryActivityIncludeByClueId(Map<String, Object> map);
 }

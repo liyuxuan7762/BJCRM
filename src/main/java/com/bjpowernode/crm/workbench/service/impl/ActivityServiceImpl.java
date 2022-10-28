@@ -69,4 +69,9 @@ public class ActivityServiceImpl implements ActivityService {
     public List<Activity> queryActivityExcludeByClueId(Map<String, Object> map) {
         return mapper.selectActivityExcludeByClueId(map);
     }
+
+    @Override
+    public List<Activity> queryActivityIncludeByClueId(Map<String, Object> map) {
+        return mapper.selectActivityIncludeByClueId(map);
+    }
 }

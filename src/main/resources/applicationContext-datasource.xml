@@ -45,7 +45,7 @@
             <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
             <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
             <tx:method name="do*" propagation="REQUIRED" rollback-for="Exception"/>
-            <tx:method name="*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED" read-only="false"/>
         </tx:attributes>
     </tx:advice>
 </beans>
