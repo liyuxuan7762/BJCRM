@@ -117,8 +117,17 @@
         </foreach>
     </insert>
 
-    <delete id="deleteRelationByActivityAndClueId" parameterType="com.bjpowernode.crm.workbench.domain.ClueActivityRelation">
-        delete from tbl_clue_activity_relation
-        where activity_id = #{activityId} and clue_id = #{clueId}
+    <delete id="deleteRelationByActivityAndClueId"
+            parameterType="com.bjpowernode.crm.workbench.domain.ClueActivityRelation">
+        delete
+        from tbl_clue_activity_relation
+        where activity_id = #{activityId}
+          and clue_id = #{clueId}
     </delete>
+
+    <select id="selectRelationByClueId" parameterType="string" resultMap="BaseResultMap">
+        select id, clue_id, activity_id
+        from tbl_clue_activity_relation
+        where clue_id = #{clueId}
+    </select>
 </mapper>
