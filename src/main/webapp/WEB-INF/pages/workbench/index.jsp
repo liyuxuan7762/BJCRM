@@ -9,6 +9,7 @@
     <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
     <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="jquery/echarts/echarts.min.js"></script>
     <script type="text/javascript">
 
         //页面加载完毕
@@ -193,7 +194,7 @@
                     class="glyphicon glyphicon-user"></span> 客户</a></li>
             <li class="liClass"><a href="contacts/index.html" target="workareaFrame"><span
                     class="glyphicon glyphicon-earphone"></span> 联系人</a></li>
-            <li class="liClass"><a href="transaction/index.html" target="workareaFrame"><span
+            <li class="liClass"><a href="workbench/transaction/index.do" target="workareaFrame"><span
                     class="glyphicon glyphicon-usd"></span> 交易（商机）</a></li>
             <li class="liClass"><a href="visit/index.html" target="workareaFrame"><span
                     class="glyphicon glyphicon-phone-alt"></span> 售后回访</a></li>
@@ -208,7 +209,7 @@
                             class="glyphicon glyphicon-chevron-right"></span> 线索统计图表</a></li>
                     <li class="liClass"><a href="chart/customerAndContacts/index.html" target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
                             class="glyphicon glyphicon-chevron-right"></span> 客户和联系人统计图表</a></li>
-                    <li class="liClass"><a href="chart/transaction/index.html" target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
+                    <li class="liClass"><a href="workbench/chart/transaction/index.do" target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
                             class="glyphicon glyphicon-chevron-right"></span> 交易统计图表</a></li>
                 </ul>
             </li>

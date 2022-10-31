@@ -58,4 +58,7 @@ public interface ClueRemarkMapper {
 
     // 不联表查询一个线索的评论
     List<ClueRemark> selectClueRemarkById(String id);
+
+    // 删除备注
+    int deleteClueRemarkById(String clueId);
 }

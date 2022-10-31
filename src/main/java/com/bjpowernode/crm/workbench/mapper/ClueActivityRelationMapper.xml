@@ -130,4 +130,11 @@
         from tbl_clue_activity_relation
         where clue_id = #{clueId}
     </select>
+
+    <delete id="deleteClueActivityRelationById" parameterType="string">
+        delete
+        from tbl_clue_activity_relation
+        where clue_id = #{clueId}
+
+    </delete>
 </mapper>

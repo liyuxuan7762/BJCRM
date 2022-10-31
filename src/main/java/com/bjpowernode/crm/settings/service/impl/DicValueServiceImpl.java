@@ -18,4 +18,14 @@ public class DicValueServiceImpl implements DicValueService {
     public List<DicValue> queryDicValueByTypeCode(String typeCode) {
         return mapper.selectDicValueByTypeCode(typeCode);
     }
+
+    @Override
+    public String queryOrderNoByValue(String value) {
+        return mapper.selectOrderNoByValue(value);
+    }
+
+    @Override
+    public List<DicValue> queryAllStage() {
+        return mapper.selectAllStage();
+    }
 }

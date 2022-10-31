@@ -350,8 +350,14 @@
 
     <select id="selectClueById" parameterType="string" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from tbl_clue
         where id = #{id}
     </select>
+
+    <delete id="deleteClueById" parameterType="string">
+        delete
+        from tbl_clue
+        where id = #{id}
+    </delete>
 </mapper>

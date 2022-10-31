@@ -134,10 +134,22 @@
 
     <!--    根据TypeCode查询value-->
     <select id="selectDicValueByTypeCode" parameterType="string" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List" />
+        select
+        <include refid="Base_Column_List"/>
         from tbl_dic_value
         where type_code = #{typeCode}
         order by order_no
     </select>
+    <select id="selectOrderNoByValue" parameterType="string" resultType="string">
+        select order_no
+        from tbl_dic_value
+        where value = #{value}
+    </select>
 
+    <select id="selectAllStage" resultMap="BaseResultMap">
+        select id, value, text, order_no, type_code
+        from tbl_dic_value
+        where type_code = 'stage'
+        order by order_no asc
+    </select>
 </mapper>

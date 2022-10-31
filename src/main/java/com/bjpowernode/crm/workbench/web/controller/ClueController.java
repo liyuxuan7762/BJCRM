@@ -12,6 +12,7 @@ import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.domain.Clue;
 import com.bjpowernode.crm.workbench.domain.ClueActivityRelation;
 import com.bjpowernode.crm.workbench.domain.ClueRemark;
+import com.bjpowernode.crm.workbench.mapper.ContactsActivityRelationMapper;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.ClueActivityRelationService;
 import com.bjpowernode.crm.workbench.service.ClueRemarkService;
@@ -41,6 +42,7 @@ public class ClueController {
     private ActivityService activityService;
     @Autowired
     private ClueActivityRelationService clueActivityRelationService;
+
 
     // 接收用户请求，将所有下拉列表值查出来，然后通过作用域传递到前台并跳转页面
     @RequestMapping("/workbench/clue/index.do")
@@ -206,6 +208,7 @@ public class ClueController {
         map.put("stage", stage);
         map.put("activityId", activityId);
         map.put(Constants.SESSION_USER_KEY, session.getAttribute(Constants.SESSION_USER_KEY));
+        map.put("isCreatedTransaction", isCreatedTransaction);
 
         ReturnObj obj = new ReturnObj();
         // 调用业务

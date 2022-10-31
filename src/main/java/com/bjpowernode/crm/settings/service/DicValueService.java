@@ -7,4 +7,8 @@ import java.util.List;
 public interface DicValueService {
     // 根据TypeCode查询下拉列表的值
     List<DicValue> queryDicValueByTypeCode(String typeCode);
+
+    String queryOrderNoByValue(String value);
+
+    List<DicValue> queryAllStage();
 }

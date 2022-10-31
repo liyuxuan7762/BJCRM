@@ -55,4 +55,10 @@ public interface DicValueMapper {
 
     // 根据typeCode查询value值
     List<DicValue> selectDicValueByTypeCode(String typeCode);
+
+    // 根据阶段名称查询阶段的orderNo
+    String selectOrderNoByValue(String value);
+
+
+    List<DicValue> selectAllStage();
 }

@@ -493,7 +493,7 @@
                 <tr>
                     <td><input type="checkbox"/></td>
                     <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='workbench/clue/clueDetail.do?clueId=cdc631c7cc90453e9f5305e310344073';">李四先生</a></td>
+                           onclick="window.location.href='workbench/clue/clueDetail.do?clueId=8911e329beed4eacbd17e507542d11ce';">李四先生</a></td>
                     <td>动力节点</td>
                     <td>010-84846003</td>
                     <td>12345678901</td>

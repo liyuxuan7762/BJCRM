@@ -226,6 +226,12 @@
         where id = #{id,jdbcType=CHAR}
     </update>
 
+    <select id="queryCustomerNameByName" parameterType="string" resultType="string">
+        select name
+        from tbl_customer
+        where name like '%' #{name} '%'
+    </select>
+
 
     <insert id="insertCustomer" parameterType="com.bjpowernode.crm.workbench.domain.Customer">
         insert into tbl_customer (id, owner, name, website, phone, create_by, create_time,
@@ -234,5 +240,13 @@
         values (#{id}, #{owner}, #{name}, #{website}, #{phone}, #{createBy}, #{createTime}, #{contactSummary},
                 #{nextContactTime}, #{description}, #{address});
     </insert>
+
+
+    <select id="queryCustomerByName" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_customer
+        where name = #{name}
+    </select>
 
 </mapper>

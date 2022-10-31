@@ -59,4 +59,7 @@ public interface ClueMapper {
 
     // 根据线索ID查询线索信息 不需要联表查询
     Clue selectClueById(String id);
+
+    // 删除线索
+    int deleteClueById(String id);
 }
